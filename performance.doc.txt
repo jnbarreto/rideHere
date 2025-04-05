@@ -1,0 +1,1 @@
+// autocannon -c define as conexões -d duração -p quantas pipelines de execução
