@@ -1,7 +1,7 @@
 import axios from "axios";
-import Signup from "../src/signup";
-import AccountDAODataBase from "../src/accountDAO";
-import GetAccountId from "../src/getAccountById";
+import Signup from "../src/application/usecase/signup";
+import AccountDAODataBase from "../src/infra/repository/accountDAO";
+import GetAccountId from "../src/application/usecase/getAccountById";
 
 describe("Test Integrarion", () => {
   let account: { accountId: string };

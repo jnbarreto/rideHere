@@ -1,10 +1,10 @@
-import Signup from "../src/signup";
-import AccountDAODataBase from "../src/accountDAO";
-import GetAccountId from "../src/getAccountById";
+import Signup from "../src/application/usecase/signup";
+import AccountDAODataBase from "../src/infra/repository/accountDAO";
+import GetAccountId from "../src/application/usecase/getAccountById";
 
 describe("Test Account By ID", () => {
-    let account: { accountId:string };
-    let getAccountId: any;
+  let account: { accountId: string };
+  let getAccountId: any;
 
   beforeAll(async () => {
     const input = {
@@ -28,7 +28,8 @@ describe("Test Account By ID", () => {
   });
 
   test("deve buscar um usuario com id inválido", async function () {
-    await expect(getAccountId.execute("321321321")).rejects.toThrow("Account Not Found")
+    await expect(getAccountId.execute("321321321")).rejects.toThrow(
+      "Account Not Found"
+    );
   });
-
 });

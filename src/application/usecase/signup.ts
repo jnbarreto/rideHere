@@ -1,14 +1,22 @@
-import AccountDAO from "./accountDAO";
-import Account from "./Account";
+import AccountDAO from "../../infra/repository/accountDAO";
+import Account from "../../domain/entity/Account";
 
 export default class Signup {
-    constructor(private accountDAO: AccountDAO) {}
+  constructor(private accountDAO: AccountDAO) {}
 
   async execute(input: any) {
     try {
       const isUser = await this.accountDAO.getAccountByEmail(input.email);
       if (isUser) throw new Error("User already exists");
-      const account = Account.create(input.name, input.email, input.cpf, input.password, input.isPassenger, input.isDriver, input.carPlate)
+      const account = Account.create(
+        input.name,
+        input.email,
+        input.cpf,
+        input.password,
+        input.isPassenger,
+        input.isDriver,
+        input.carPlate
+      );
       await this.accountDAO.save(account);
       const result = {
         accountId: account.getAccountId(),
