@@ -1,9 +1,9 @@
 import express from "express";
 import Signup from "./application/usecase/signup";
 import GetAccountId from "./application/usecase/getAccountById";
-import AccountDAODataBase, {
+import AccountRepositoryDataBase, {
   AccountDAODataBaseMemory,
-} from "./infra/repository/accountDAO";
+} from "./infra/repository/accountRepository";
 
 const app = express();
 app.use(express.json());
@@ -11,7 +11,7 @@ app.use(express.json());
 app.post("/signup", async function (req, res) {
   const input = req.body;
   try {
-    const databaseConnect = new AccountDAODataBase();
+    const databaseConnect = new AccountRepositoryDataBase();
     const signup = new Signup(databaseConnect);
     const output = await signup.execute(input);
     res.status(200).json(output);
@@ -22,7 +22,7 @@ app.post("/signup", async function (req, res) {
 
 app.get("/account/:id", async function (req, res) {
   try {
-    const databaseConnect = new AccountDAODataBase();
+    const databaseConnect = new AccountRepositoryDataBase();
     const getAccount = new GetAccountId(databaseConnect);
     const output = await getAccount.execute(req.params.id);
     res.status(200).json(output);

@@ -1,9 +1,9 @@
 import pgp from "pg-promise";
 import Account from "../../domain/entity/Account";
 export default interface AccountDAO {
-  getAccountByEmail(email: string): Promise<any>;
+  getAccountByEmail(email: string): Promise<Account | undefined>;
   save(input: any): Promise<void>;
-  getAccountById(id: string): Promise<any>;
+  getAccountById(id: string): Promise<Account | undefined>;
 }
 
 export default class AccountDAODataBase implements AccountDAO {
@@ -14,7 +14,17 @@ export default class AccountDAODataBase implements AccountDAO {
       [email]
     );
     await connection.$pool.end();
-    return accountData;
+    if (!accountData) return;
+    return new Account(
+      accountData.account_id,
+      accountData.name,
+      accountData.email,
+      accountData.cpf,
+      accountData.password,
+      accountData.is_passenger,
+      accountData.is_driver,
+      accountData.car_plate
+    );
   }
 
   async save(input: Account) {
@@ -42,7 +52,17 @@ export default class AccountDAODataBase implements AccountDAO {
       [id]
     );
     await connection.$pool.end();
-    return accountData;
+    if (!accountData) return;
+    return new Account(
+      accountData.account_id,
+      accountData.name,
+      accountData.email,
+      accountData.cpf,
+      accountData.password,
+      accountData.is_passenger,
+      accountData.is_driver,
+      accountData.car_plate
+    );
   }
 }
 

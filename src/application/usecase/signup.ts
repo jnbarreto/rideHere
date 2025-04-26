@@ -1,12 +1,12 @@
-import AccountDAO from "../../infra/repository/accountDAO";
+import AccountRepository from "../../infra/repository/accountRepository";
 import Account from "../../domain/entity/Account";
 
 export default class Signup {
-  constructor(private accountDAO: AccountDAO) {}
+  constructor(private accountRepository: AccountRepository) {}
 
   async execute(input: any) {
     try {
-      const isUser = await this.accountDAO.getAccountByEmail(input.email);
+      const isUser = await this.accountRepository.getAccountByEmail(input.email);
       if (isUser) throw new Error("User already exists");
       const account = Account.create(
         input.name,
@@ -17,7 +17,7 @@ export default class Signup {
         input.isDriver,
         input.carPlate
       );
-      await this.accountDAO.save(account);
+      await this.accountRepository.save(account);
       const result = {
         accountId: account.getAccountId(),
       };
