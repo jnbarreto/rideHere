@@ -1,37 +1,19 @@
-import { validateCpf } from "../src/validateCpf";
+import CPF from "../src/domain/valueObject/CPF";
 
-test("Deve validar um cpf com o digito diferente de zero", function () {
-	const cpf = "97456321558";
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(true);
+test.each([
+	"97456321558",
+	"71428793860",
+	"87748248800"
+])("Deve validar cpf válido %s", function (value: string) {
+	const cpf = new CPF(value);
+	expect(cpf.getValue()).toBe(value);
 });
 
-test("Deve validar um cpf com o segundo digito zero", function () {
-	const cpf = "71428793860";
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(true);
-});
 
-test("Deve validar um cpf com o primeiro digito zero", function () {
-	const cpf = "87748248800";
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(true);
-});
-
-test("Não deve validar um cpf com menos de 11 caracteres", function () {
-	const cpf = "9745632155";
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(false);
-});
-
-test("Não deve validar um cpf com todos os caracteres iguais", function () {
-	const cpf = "11111111111";
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(false);
-});
-
-test("Não deve validar um cpf com letras", function () {
-	const cpf = "97a56321558";
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(false);
+test.each([
+	"9745632155",
+	"11111111111",
+	"97a56321558"
+])("Não deve validar um cpf inválido %s", function (value: string) {
+	expect(() => new CPF(value)).toThrow(new Error("Invalid CPF"));
 });
