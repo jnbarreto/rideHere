@@ -1,13 +1,13 @@
 import axios from "axios";
 import Signup from "../src/application/usecase/signup";
-import AccountDAODataBase, {
+import AccountRepositoryDataBase, {
   AccountDAODataBaseMemory,
-} from "../src/infra/repository/accountDAO";
+} from "../src/infra/repository/accountRepository";
 
 describe("Test Signup", () => {
   let signup: any;
   beforeAll(async () => {
-    const databaseConnect = new AccountDAODataBase();
+    const databaseConnect = new AccountRepositoryDataBase();
     // const databaseConnect = new AccountDAODataBaseMemory();
     signup = new Signup(databaseConnect);
   });
@@ -41,7 +41,7 @@ describe("Test Signup", () => {
   test("deve retornar erro de usuário duplicado", async function () {
     const input = {
       email: `codee${Math.random()}@gmail.com`,
-      password: "w@awx5cB",
+      password: "@Codee2025",
       name: "codee tech",
       cpf: "995.525.810-10",
       carPlate: "",

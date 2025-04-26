@@ -1,6 +1,6 @@
 import axios from "axios";
 import Signup from "../src/application/usecase/signup";
-import AccountDAODataBase from "../src/infra/repository/accountDAO";
+import AccountRepositoryDataBase from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
 
 describe("Test Integrarion", () => {
@@ -17,7 +17,7 @@ describe("Test Integrarion", () => {
       isPassenger: true,
       isDriver: false,
     };
-    const databaseConnect = new AccountDAODataBase();
+    const databaseConnect = new AccountRepositoryDataBase();
     const signup = new Signup(databaseConnect);
     getAccountId = new GetAccountId(databaseConnect);
     account = await signup.execute(input);

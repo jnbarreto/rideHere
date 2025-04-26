@@ -1,5 +1,5 @@
 import Signup from "../src/application/usecase/signup";
-import AccountDAODataBase from "../src/infra/repository/accountDAO";
+import AccountRepositoryDataBase from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
 
 describe("Test Account By ID", () => {
@@ -16,7 +16,7 @@ describe("Test Account By ID", () => {
       isPassenger: true,
       isDriver: false,
     };
-    const databaseConnect = new AccountDAODataBase();
+    const databaseConnect = new AccountRepositoryDataBase();
     const signup = new Signup(databaseConnect);
     getAccountId = new GetAccountId(databaseConnect);
     account = await signup.execute(input);
@@ -24,7 +24,7 @@ describe("Test Account By ID", () => {
 
   test("deve buscar um usuario valido pelo id", async function () {
     const accountData = await getAccountId.execute(account.accountId);
-    expect(accountData.account_id).toBe(account.accountId);
+    expect(accountData.accountId).toBe(account.accountId);
   });
 
   test("deve buscar um usuario com id inválido", async function () {
