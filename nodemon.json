@@ -3,5 +3,5 @@
         "src"
     ],
     "ext": "ts",
-    "exec": "yarn ts-node src/api.ts"
+    "exec": "npx ts-node src/api.ts"
 }
