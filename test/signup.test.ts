@@ -16,7 +16,7 @@ describe("Test Signup", () => {
     Registry.getInstance().provide("mailerGateway", mailerGateway);
     // const databaseConnect = new AccountDAODataBaseMemory();
     signup = new Signup();
-    getAccount = new GetAccountId(accountRepository)
+    getAccount = new GetAccountId()
   });
 
   test("deve cadastrar um passageiro válido", async function () {

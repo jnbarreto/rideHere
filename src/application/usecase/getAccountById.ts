@@ -1,11 +1,13 @@
+import { inject } from "../../infra/DI/Registry";
 import AccountRepository from "../../infra/repository/accountRepository";
 
 export default class GetAccountId {
-  constructor(readonly accountRepository: AccountRepository) {}
+ @inject("accountRepository")
+ accountRepository?: AccountRepository;
 
   async execute(accountId: string) {
     try {
-      const accountData = await this.accountRepository.getAccountById(accountId);
+      const accountData = await this.accountRepository?.getAccountById(accountId);
       return {
         accountId: accountData?.getAccountId(),
         name: accountData?.getName(),

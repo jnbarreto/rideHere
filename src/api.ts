@@ -29,7 +29,7 @@ app.post("/signup", async function (req, res) {
 
 app.get("/account/:id", async function (req, res) {
   try {
-    const getAccount = new GetAccountId(accountRepository);
+    const getAccount = new GetAccountId();
     const output = await getAccount.execute(req.params.id);
     res.status(200).json(output);
   } catch (error: any) {

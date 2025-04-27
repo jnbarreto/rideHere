@@ -24,7 +24,7 @@ describe("Test Integrarion", () => {
     Registry.getInstance().provide("accountRepository", accountRepository);
     Registry.getInstance().provide("mailerGateway", mailerGateway);
     const signup = new Signup();
-    getAccountId = new GetAccountId(accountRepository);
+    getAccountId = new GetAccountId();
     account = await signup.execute(input);
   });
 
