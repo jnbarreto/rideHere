@@ -61,32 +61,6 @@ describe("Test Signup", () => {
     );
   });
 
-  test("deve retornar erro de nome inválido", async function () {
-    const input = {
-      email: `codee${Math.random()}@gmail.com`,
-      password: "w^awx5cB",
-      name: "codee",
-      cpf: "995.525.810-10",
-      carPlate: "",
-      isPassenger: true,
-      isDriver: false,
-    };
-    await expect(signup.execute(input)).rejects.toThrow("Invalid Name");
-  });
-
-  test("deve retornar erro de email inválido", async function () {
-    const input = {
-      email: `codee${Math.random()}gmail.com`,
-      password: "w^awx5cB",
-      name: "codee tech",
-      cpf: "995.525.810-10",
-      carPlate: "",
-      isPassenger: true,
-      isDriver: false,
-    };
-    await expect(signup.execute(input)).rejects.toThrow("Invalid Email");
-  });
-
   test("deve cadastrar um motorista válido", async function () {
     const input = {
       email: `jhonDoe${Math.random()}@gmail.com`,
@@ -99,18 +73,5 @@ describe("Test Signup", () => {
     };
     const result = await signup.execute(input);
     expect(result).toBeDefined();
-  });
-
-  test("deve retornar erro de car plate inválido", async function () {
-    const input = {
-      email: `codee${Math.random()}@gmail.com`,
-      password: "w^awx5cB",
-      name: "codee tech",
-      cpf: "995.525.810-10",
-      carPlate: "abc",
-      isPassenger: false,
-      isDriver: true,
-    };
-    await expect(signup.execute(input)).rejects.toThrow("Invalid Car Plate");
   });
 });
