@@ -15,6 +15,6 @@ describe("Account",() => {
         expect(() => Account.create("jhon Doe", `jhonDoe${Math.random()}@gmail.com`, "111.111.111-11", "Jhon@123", true, false, "")).toThrow("Invalid CPF")
     })
     test("Não deve criar uma conta com placa do carro inválida", async() => {
-        expect(() => Account.create("jhon Doe", `jhonDoe${Math.random()}`, "158.276.650-96", "Jhon@123", false, true, "")).toThrow("Invalid Email")
+        expect(() => Account.create("jhon Doe", `jhonDoe${Math.random()}`, "158.276.650-96", "Jhon@123", false, true)).toThrow("Invalid Email")
     })
 })

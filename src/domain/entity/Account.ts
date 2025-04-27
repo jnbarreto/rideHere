@@ -38,7 +38,7 @@ export default class Account {
     password: string,
     isPassenger: boolean,
     isDriver: boolean,
-    carPlate: string
+    carPlate?: string
   ) {
     const accountId = UUID.generateUUID();
     return new Account(
@@ -49,7 +49,7 @@ export default class Account {
       password,
       isPassenger,
       isDriver,
-      carPlate
+      carPlate as string
     );
   }
 
