@@ -2,6 +2,8 @@ import axios from "axios";
 import Signup from "../src/application/usecase/signup";
 import AccountRepositoryDataBase from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
+import Registry from "../src/infra/DI/Registry";
+import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 
 describe("Test Integrarion", () => {
   let account: { accountId: string };
@@ -17,9 +19,12 @@ describe("Test Integrarion", () => {
       isPassenger: true,
       isDriver: false,
     };
-    const databaseConnect = new AccountRepositoryDataBase();
-    const signup = new Signup(databaseConnect);
-    getAccountId = new GetAccountId(databaseConnect);
+    const accountRepository = new AccountRepositoryDataBase();
+    const mailerGateway = new MailerGatewayMemory();
+    Registry.getInstance().provide("accountRepository", accountRepository);
+    Registry.getInstance().provide("mailerGateway", mailerGateway);
+    const signup = new Signup();
+    getAccountId = new GetAccountId(accountRepository);
     account = await signup.execute(input);
   });
 

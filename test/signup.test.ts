@@ -1,15 +1,22 @@
-import axios from "axios";
 import Signup from "../src/application/usecase/signup";
 import AccountRepositoryDataBase, {
   AccountDAODataBaseMemory,
 } from "../src/infra/repository/accountRepository";
+import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
+import Registry from "../src/infra/DI/Registry";
+import GetAccountId from "../src/application/usecase/getAccountById";
 
 describe("Test Signup", () => {
   let signup: any;
-  beforeAll(async () => {
-    const databaseConnect = new AccountRepositoryDataBase();
+  let getAccount: any;
+  beforeEach(async () => {
+    const accountRepository = new AccountRepositoryDataBase();
+    const mailerGateway = new MailerGatewayMemory();
+    Registry.getInstance().provide("accountRepository", accountRepository);
+    Registry.getInstance().provide("mailerGateway", mailerGateway);
     // const databaseConnect = new AccountDAODataBaseMemory();
-    signup = new Signup(databaseConnect);
+    signup = new Signup();
+    getAccount = new GetAccountId(accountRepository)
   });
 
   test("deve cadastrar um passageiro válido", async function () {

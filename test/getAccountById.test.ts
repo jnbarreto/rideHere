@@ -1,12 +1,14 @@
 import Signup from "../src/application/usecase/signup";
 import AccountRepositoryDataBase from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
+import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
+import Registry from "../src/infra/DI/Registry";
 
 describe("Test Account By ID", () => {
   let account: { accountId: string };
   let getAccountId: any;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const input = {
       email: `codee${Math.random()}@gmail.com`,
       password: "@Codee2025",
@@ -16,9 +18,12 @@ describe("Test Account By ID", () => {
       isPassenger: true,
       isDriver: false,
     };
-    const databaseConnect = new AccountRepositoryDataBase();
-    const signup = new Signup(databaseConnect);
-    getAccountId = new GetAccountId(databaseConnect);
+    const accountRepository = new AccountRepositoryDataBase();
+    const mailerGateway =  new MailerGatewayMemory();
+    Registry.getInstance().provide("accountRepository", accountRepository);
+    Registry.getInstance().provide("mailerGateway", mailerGateway);
+    const signup = new Signup();
+    getAccountId = new GetAccountId(accountRepository);
     account = await signup.execute(input);
   });
 
