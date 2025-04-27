@@ -24,6 +24,7 @@ export default class Signup {
         input.carPlate
       );
       await this.accountRepository?.save(account);
+      await this.mailerGateway?.send(account.getEmail(),"Welcome!", `Congratulations ${account.getName()}`)
       const result = {
         accountId: account.getAccountId(),
       };
