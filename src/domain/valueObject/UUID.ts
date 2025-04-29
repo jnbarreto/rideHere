@@ -5,7 +5,7 @@ export default class UUID {
         this.id = id;
     }
 
-    static generateUUID(){
+    static create(){
         const id = crypto.randomUUID();
         return new UUID(id);
     }

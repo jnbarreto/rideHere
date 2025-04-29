@@ -40,7 +40,7 @@ export default class Account {
     isDriver: boolean,
     carPlate?: string
   ) {
-    const accountId = UUID.generateUUID();
+    const accountId = UUID.create();
     return new Account(
       accountId.getValue(),
       name,

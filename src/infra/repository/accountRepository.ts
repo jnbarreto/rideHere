@@ -1,12 +1,12 @@
 import pgp from "pg-promise";
 import Account from "../../domain/entity/Account";
-export default interface AccountDAO {
+export default interface AccountRepository {
   getAccountByEmail(email: string): Promise<Account | undefined>;
   save(input: any): Promise<void>;
   getAccountById(id: string): Promise<Account | undefined>;
 }
 
-export default class AccountDAODataBase implements AccountDAO {
+export class AccountRepositoryDB implements AccountRepository {
   async getAccountByEmail(email: string) {
     const connection = pgp()("postgres://postgres:123456@localhost:5434/app");
     const [accountData] = await connection.query(
@@ -66,7 +66,7 @@ export default class AccountDAODataBase implements AccountDAO {
   }
 }
 
-export class AccountDAODataBaseMemory implements AccountDAO {
+export class AccountDAODataBaseMemory implements AccountRepository {
   accounts: any[];
   constructor() {
     this.accounts = [{ accountId: "36070235-39f7-49c5-b219-ee5e79386856" }];

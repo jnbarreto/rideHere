@@ -1,6 +1,7 @@
 import Signup from "../src/application/usecase/signup";
-import AccountRepositoryDataBase, {
+import  {
   AccountDAODataBaseMemory,
+  AccountRepositoryDB
 } from "../src/infra/repository/accountRepository";
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 import Registry from "../src/infra/DI/Registry";
@@ -10,7 +11,7 @@ describe("Test Signup", () => {
   let signup: any;
   let getAccount: any;
   beforeEach(async () => {
-    const accountRepository = new AccountRepositoryDataBase();
+    const accountRepository = new AccountRepositoryDB();
     const mailerGateway = new MailerGatewayMemory();
     Registry.getInstance().provide("accountRepository", accountRepository);
     Registry.getInstance().provide("mailerGateway", mailerGateway);

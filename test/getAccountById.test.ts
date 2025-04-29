@@ -1,5 +1,5 @@
 import Signup from "../src/application/usecase/signup";
-import AccountRepositoryDataBase from "../src/infra/repository/accountRepository";
+import {AccountRepositoryDB} from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 import Registry from "../src/infra/DI/Registry";
@@ -18,7 +18,7 @@ describe("Test Account By ID", () => {
       isPassenger: true,
       isDriver: false,
     };
-    const accountRepository = new AccountRepositoryDataBase();
+    const accountRepository = new AccountRepositoryDB();
     const mailerGateway =  new MailerGatewayMemory();
     Registry.getInstance().provide("accountRepository", accountRepository);
     Registry.getInstance().provide("mailerGateway", mailerGateway);

@@ -1,9 +1,11 @@
 import express from "express";
 import Signup from "./application/usecase/signup";
 import GetAccountId from "./application/usecase/getAccountById";
-import AccountRepositoryDataBase, {
+import {
   AccountDAODataBaseMemory,
+  AccountRepositoryDB
 } from "./infra/repository/accountRepository";
+import { RideRepositoryDB } from "./infra/repository/RideRepository";
 import { MailerGatewayMemory } from "./infra/gateway/MaillerGateway";
 import Registry from "./infra/DI/Registry";
 
@@ -11,9 +13,11 @@ const app = express();
 app.use(express.json());
 // app.use(cors());
 
-const accountRepository = new AccountRepositoryDataBase();
+const accountRepository = new AccountRepositoryDB();
 const mailerGateway = new MailerGatewayMemory();
+const rideRepository = new RideRepositoryDB();
 Registry.getInstance().provide("accountRepository", accountRepository);
+Registry.getInstance().provide("rideRepository", rideRepository);
 Registry.getInstance().provide("mailerGateway", mailerGateway)
 
 app.post("/signup", async function (req, res) {
