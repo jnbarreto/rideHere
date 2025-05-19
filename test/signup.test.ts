@@ -6,15 +6,15 @@ import  {
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 import Registry from "../src/infra/DI/Registry";
 import GetAccountId from "../src/application/usecase/getAccountById";
+import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
 
 describe("Test Signup", () => {
   let signup: any;
   let getAccount: any;
   beforeEach(async () => {
-    const accountRepository = new AccountRepositoryDB();
-    const mailerGateway = new MailerGatewayMemory();
-    Registry.getInstance().provide("accountRepository", accountRepository);
-    Registry.getInstance().provide("mailerGateway", mailerGateway);
+    Registry.getInstance().provide("accountRepository", new AccountRepositoryDB());
+    Registry.getInstance().provide("mailerGateway", new MailerGatewayMemory());
+    Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
     // const databaseConnect = new AccountDAODataBaseMemory();
     signup = new Signup();
     getAccount = new GetAccountId()
@@ -75,4 +75,8 @@ describe("Test Signup", () => {
     const result = await signup.execute(input);
     expect(result).toBeDefined();
   });
+  afterEach(async ()=> {
+      const connection = Registry.getInstance().inject("databaseConnection");
+      await connection.close();
+  })
 });
