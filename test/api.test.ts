@@ -6,7 +6,7 @@ import Registry from "../src/infra/DI/Registry";
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
 
-describe("Test Integrarion", () => {
+describe("Test Integration", () => {
   let account: { accountId: string };
   let getAccountId: any;
 
@@ -20,10 +20,9 @@ describe("Test Integrarion", () => {
       isPassenger: true,
       isDriver: false,
     };
-    const accountRepository = new AccountRepositoryDB();
-    const mailerGateway = new MailerGatewayMemory();
-    Registry.getInstance().provide("accountRepository", accountRepository);
-    Registry.getInstance().provide("mailerGateway", mailerGateway);
+
+    Registry.getInstance().provide("accountRepository", new AccountRepositoryDB());
+    Registry.getInstance().provide("mailerGateway", new MailerGatewayMemory());
     Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
 
     const signup = new Signup();
