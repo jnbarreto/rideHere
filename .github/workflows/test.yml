@@ -27,6 +27,9 @@ jobs:
       - name: docker start
         run: npm run docker:start
 
+      - name: build project
+        run: npm run build
+
       - name: run project
         run: npm run start
 
