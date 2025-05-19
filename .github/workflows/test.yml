@@ -24,5 +24,11 @@ jobs:
       - name: install dependencies
         run: npm install
 
+      - name: docker start
+        run: npm run docker:start
+
+      - name: run project in development
+        run: npm run dev
+
       - name: run tests
         run: npm run test
