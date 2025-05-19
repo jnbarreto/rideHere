@@ -1,9 +1,9 @@
-import Signup from "../src/application/usecase/signup";
-import {AccountRepositoryDB} from "../src/infra/repository/accountRepository";
-import GetAccountId from "../src/application/usecase/getAccountById";
-import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
-import Registry from "../src/infra/DI/Registry";
-import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
+import Signup from "../../src/application/usecase/signup";
+import { AccountRepositoryDB } from "../../src/infra/repository/accountRepository";
+import GetAccountId from "../../src/application/usecase/getAccountById";
+import { MailerGatewayMemory } from "../../src/infra/gateway/MaillerGateway";
+import Registry from "../../src/infra/DI/Registry";
+import { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnection";
 
 describe("Test Account By ID", () => {
   let account: { accountId: string };
@@ -20,10 +20,13 @@ describe("Test Account By ID", () => {
       isDriver: false,
     };
     const accountRepository = new AccountRepositoryDB();
-    const mailerGateway =  new MailerGatewayMemory();
+    const mailerGateway = new MailerGatewayMemory();
     Registry.getInstance().provide("accountRepository", accountRepository);
     Registry.getInstance().provide("mailerGateway", mailerGateway);
-    Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
+    Registry.getInstance().provide(
+      "databaseConnection",
+      new PgPromiseAdapter()
+    );
 
     const signup = new Signup();
     getAccountId = new GetAccountId();
@@ -36,10 +39,12 @@ describe("Test Account By ID", () => {
   });
 
   test("deve buscar um usuario com id inválido", async function () {
-    await expect(() => getAccountId.execute("f3a8e0b4-6c7b-4bfc-9c19-8c62b290b6d4")).rejects.toThrow(new Error("Account Not Found"));
+    await expect(() =>
+      getAccountId.execute("f3a8e0b4-6c7b-4bfc-9c19-8c62b290b6d4")
+    ).rejects.toThrow(new Error("Account Not Found"));
   });
-  afterEach(async ()=> {
-      const connection = Registry.getInstance().inject("databaseConnection");
-      await connection.close();
-  })
+  afterEach(async () => {
+    const connection = Registry.getInstance().inject("databaseConnection");
+    await connection.close();
+  });
 });
