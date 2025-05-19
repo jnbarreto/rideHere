@@ -36,9 +36,7 @@ describe("Test Account By ID", () => {
   });
 
   test("deve buscar um usuario com id inválido", async function () {
-    await expect(getAccountId.execute("321321321")).rejects.toThrow(
-      "Account Not Found"
-    );
+    await expect(() => getAccountId.execute("f3a8e0b4-6c7b-4bfc-9c19-8c62b290b6d4")).rejects.toThrow(new Error("Account Not Found"));
   });
   afterEach(async ()=> {
       const connection = Registry.getInstance().inject("databaseConnection");
