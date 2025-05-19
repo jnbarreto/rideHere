@@ -4,6 +4,7 @@ import { AccountRepositoryDB } from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
 import Registry from "../src/infra/DI/Registry";
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
+import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
 
 describe("Test Integrarion", () => {
   let account: { accountId: string };
@@ -23,6 +24,8 @@ describe("Test Integrarion", () => {
     const mailerGateway = new MailerGatewayMemory();
     Registry.getInstance().provide("accountRepository", accountRepository);
     Registry.getInstance().provide("mailerGateway", mailerGateway);
+    Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
+
     const signup = new Signup();
     getAccountId = new GetAccountId();
     account = await signup.execute(input);

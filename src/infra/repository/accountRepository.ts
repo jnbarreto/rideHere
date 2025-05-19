@@ -1,5 +1,6 @@
-import pgp from "pg-promise";
 import Account from "../../domain/entity/Account";
+import { inject } from "../DI/Registry";
+import DatabaseConnection from "../database/DatabaseConnection";
 export default interface AccountRepository {
   getAccountByEmail(email: string): Promise<Account | undefined>;
   save(input: any): Promise<void>;
@@ -7,13 +8,14 @@ export default interface AccountRepository {
 }
 
 export class AccountRepositoryDB implements AccountRepository {
+  @inject("databaseConnection")
+  connection?: DatabaseConnection;
+
   async getAccountByEmail(email: string) {
-    const connection = pgp()("postgres://postgres:123456@localhost:5434/app");
-    const [accountData] = await connection.query(
+    const [accountData] = await this.connection?.query(
       "select * from ccca.account where email = $1",
       [email]
     );
-    await connection.$pool.end();
     if (!accountData) return;
     return new Account(
       accountData.account_id,
@@ -28,8 +30,7 @@ export class AccountRepositoryDB implements AccountRepository {
   }
 
   async save(input: Account) {
-    const connection = pgp()("postgres://postgres:123456@localhost:5434/app");
-    await connection.query(
+    await this.connection?.query(
       "insert into ccca.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver, password) values ($1, $2, $3, $4, $5, $6, $7, $8)",
       [
         input.getAccountId(),
@@ -42,16 +43,13 @@ export class AccountRepositoryDB implements AccountRepository {
         input.getPassword(),
       ]
     );
-    await connection.$pool.end();
   }
 
   async getAccountById(id: string) {
-    const connection = pgp()("postgres://postgres:123456@localhost:5434/app");
-    const [accountData] = await connection.query(
+    const [accountData] = await this.connection?.query(
       "select * from ccca.account where account_id = $1",
       [id]
     );
-    await connection.$pool.end();
     if (!accountData) return;
     return new Account(
       accountData.account_id,

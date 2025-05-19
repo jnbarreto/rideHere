@@ -8,17 +8,16 @@ import {
 import { RideRepositoryDB } from "./infra/repository/RideRepository";
 import { MailerGatewayMemory } from "./infra/gateway/MaillerGateway";
 import Registry from "./infra/DI/Registry";
+import { PgPromiseAdapter } from "./infra/database/DatabaseConnection";
 
 const app = express();
 app.use(express.json());
 // app.use(cors());
 
-const accountRepository = new AccountRepositoryDB();
-const mailerGateway = new MailerGatewayMemory();
-const rideRepository = new RideRepositoryDB();
-Registry.getInstance().provide("accountRepository", accountRepository);
-Registry.getInstance().provide("rideRepository", rideRepository);
-Registry.getInstance().provide("mailerGateway", mailerGateway)
+Registry.getInstance().provide("accountRepository", new AccountRepositoryDB());
+Registry.getInstance().provide("rideRepository", new RideRepositoryDB());
+Registry.getInstance().provide("mailerGateway", new MailerGatewayMemory());
+Registry.getInstance().provide("databaseConnection",  new PgPromiseAdapter());
 
 app.post("/signup", async function (req, res) {
   const input = req.body;

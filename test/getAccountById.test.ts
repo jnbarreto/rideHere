@@ -3,6 +3,7 @@ import {AccountRepositoryDB} from "../src/infra/repository/accountRepository";
 import GetAccountId from "../src/application/usecase/getAccountById";
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 import Registry from "../src/infra/DI/Registry";
+import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
 
 describe("Test Account By ID", () => {
   let account: { accountId: string };
@@ -22,6 +23,8 @@ describe("Test Account By ID", () => {
     const mailerGateway =  new MailerGatewayMemory();
     Registry.getInstance().provide("accountRepository", accountRepository);
     Registry.getInstance().provide("mailerGateway", mailerGateway);
+    Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
+
     const signup = new Signup();
     getAccountId = new GetAccountId();
     account = await signup.execute(input);
@@ -37,4 +40,8 @@ describe("Test Account By ID", () => {
       "Account Not Found"
     );
   });
+  afterEach(async ()=> {
+      const connection = Registry.getInstance().inject("databaseConnection");
+      await connection.close();
+  })
 });

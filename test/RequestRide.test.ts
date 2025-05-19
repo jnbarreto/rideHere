@@ -2,6 +2,7 @@ import GetAccountId from "../src/application/usecase/getAccountById";
 import GetRide from "../src/application/usecase/GetRide";
 import RequestRide from "../src/application/usecase/RequestRide";
 import Signup from "../src/application/usecase/signup";
+import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
 import Registry from "../src/infra/DI/Registry";
 import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
 import { AccountRepositoryDB }  from "../src/infra/repository/accountRepository";
@@ -13,12 +14,10 @@ describe("Request Ride", () => {
     let requestRide: RequestRide;
     let getRide: GetRide;
     beforeEach(() => {
-        const accountRepository = new AccountRepositoryDB();
-        const mailerGateway = new MailerGatewayMemory();
-        const rideRepository = new RideRepositoryDB();
-        Registry.getInstance().provide("accountRepository", accountRepository);
-        Registry.getInstance().provide("mailerGateway", mailerGateway);
-        Registry.getInstance().provide("rideRepository", rideRepository);
+        Registry.getInstance().provide("accountRepository", new AccountRepositoryDB());
+        Registry.getInstance().provide("mailerGateway", new MailerGatewayMemory());
+        Registry.getInstance().provide("rideRepository", new RideRepositoryDB());
+        Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
         signup = new Signup();
         getAccount = new GetAccountId();
         requestRide = new RequestRide();
@@ -74,4 +73,9 @@ describe("Request Ride", () => {
         };
         await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrow(new Error("Account must be from a passenger"));
     });
+
+    afterEach(async ()=> {
+        const connection = Registry.getInstance().inject("databaseConnection");
+        await connection.close();
+    })
 })
