@@ -43,16 +43,10 @@ describe("Request Ride", () => {
             toLong: -48.522234807851476
         }
         const outputRequestRide = await requestRide.execute(inputRequestRide);
-        console.log('request ride',outputRequestRide);
         expect(outputRequestRide.rideId).toBeDefined();
-        console.log('requestRideId',outputRequestRide.rideId);
-
         const outputGetRide = await getRide.execute(outputRequestRide.rideId);
-        console.log('GET ID ride',outputGetRide.rideId, outputRequestRide.rideId);
-
         expect(outputGetRide.rideId).toBe(outputRequestRide.rideId);
         expect(outputGetRide.passengerId).toBe(inputRequestRide.passengerId);
-        console.log("from lat", outputGetRide.fromLat, inputRequestRide.fromLat);
         expect(outputGetRide.fromLat).toBe(inputRequestRide.fromLat);
         expect(outputGetRide.fromLong).toBe(inputRequestRide.fromLong);
         expect(outputGetRide.toLat).toBe(inputRequestRide.toLat);
