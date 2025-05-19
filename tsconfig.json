@@ -102,5 +102,5 @@
     "src",
     "test"
   ],
-  "exclude": ["test","tests", "**/*.spec.ts", "**/*.test.ts", "node_modules"]
+  "exclude": ["tests", "**/*.spec.ts", "**/*.test.ts", "node_modules"]
 }
