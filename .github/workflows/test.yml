@@ -2,21 +2,27 @@ name: CI of tests
 
 on:
   pull_request:
-    branches: [ main, developer]
+    branches: [main, developer]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
 
     steps:
       - name: checkout project
         uses: actions/checkout@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+
       - name: install dependencies
         run: npm install
+
       - name: run tests
         run: npm run test
