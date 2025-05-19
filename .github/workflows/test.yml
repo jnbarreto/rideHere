@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: install dependencies
         run: npm install
@@ -27,8 +27,8 @@ jobs:
       - name: docker start
         run: npm run docker:start
 
-      - name: run project in development
-        run: npm run dev
+      - name: run project
+        run: npm run start
 
       - name: run tests
         run: npm run test
