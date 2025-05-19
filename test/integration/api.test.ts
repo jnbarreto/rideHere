@@ -1,10 +1,10 @@
 import axios from "axios";
-import Signup from "../src/application/usecase/signup";
-import { AccountRepositoryDB } from "../src/infra/repository/accountRepository";
-import GetAccountId from "../src/application/usecase/getAccountById";
-import Registry from "../src/infra/DI/Registry";
-import { MailerGatewayMemory } from "../src/infra/gateway/MaillerGateway";
-import { PgPromiseAdapter } from "../src/infra/database/DatabaseConnection";
+import Signup from "../../src/application/usecase/signup";
+import { AccountRepositoryDB } from "../../src/infra/repository/accountRepository";
+import GetAccountId from "../../src/application/usecase/getAccountById";
+import Registry from "../../src/infra/DI/Registry";
+import { MailerGatewayMemory } from "../../src/infra/gateway/MaillerGateway";
+import { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnection";
 
 describe("Test Integration", () => {
   let account: { accountId: string };
