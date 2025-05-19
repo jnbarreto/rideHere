@@ -31,7 +31,7 @@ jobs:
         run: npm run build
 
       - name: run project
-        run: npm run start
+        run: npm run start &
 
       - name: run tests
         run: npm run test
