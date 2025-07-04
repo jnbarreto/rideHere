@@ -76,4 +76,8 @@ export default class Account {
   getPassword() {
     return this.password.getValue();
   }
+
+  changePassword(newPassword: string) {
+    this.password = new Password(newPassword);
+  }
 }
