@@ -1,5 +1,5 @@
 import UUID from "../valueObject/UUID";
-import Coord from "./Coord";
+import Coord from "../valueObject/Coord";
 
 export default class Ride {
     private rideId: UUID;
