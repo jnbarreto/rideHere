@@ -8,7 +8,7 @@
     "docker:stop": "docker compose stop",
     "docker:clean": "docker compose rm -fsv",
     "build": "npx tsc",
-    "test": "npx jest test/unit  --silent",
+    "test": "npx jest test/unit  --coverage --silent",
     "start": "tsc && node ./dist/main.js",
     "dev": " nodemon src/main.ts",
     "startClimem": "npx tsc && CLIMEM=8999 node -r climem ./dist/src/main",
