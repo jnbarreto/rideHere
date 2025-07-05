@@ -9,7 +9,7 @@ import { MailerGatewayMemory } from "../../src/infra/gateway/MaillerGateway";
 import { AccountRepositoryDB } from "../../src/infra/repository/accountRepository";
 import { RideRepositoryDB } from "../../src/infra/repository/RideRepository";
 
-describe("Request Ride", () => {
+describe("Accept Ride", () => {
   let signup: Signup;
   let getAccount: GetAccountId;
   let requestRide: RequestRide;
