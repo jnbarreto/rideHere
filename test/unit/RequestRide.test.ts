@@ -6,6 +6,7 @@ import { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnection";
 import Registry from "../../src/infra/DI/Registry";
 import { MailerGatewayMemory } from "../../src/infra/gateway/MaillerGateway";
 import { AccountRepositoryDB } from "../../src/infra/repository/accountRepository";
+import { PositionRepositoryDB } from "../../src/infra/repository/PositionRepository";
 import { RideRepositoryDB } from "../../src/infra/repository/RideRepository";
 
 describe("Request Ride", () => {
@@ -20,6 +21,7 @@ describe("Request Ride", () => {
     );
     Registry.getInstance().provide("mailerGateway", new MailerGatewayMemory());
     Registry.getInstance().provide("rideRepository", new RideRepositoryDB());
+    Registry.getInstance().provide("positionRepository", new PositionRepositoryDB());
     Registry.getInstance().provide(
       "databaseConnection",
       new PgPromiseAdapter()

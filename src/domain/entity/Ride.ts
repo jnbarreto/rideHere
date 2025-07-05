@@ -1,6 +1,8 @@
 import UUID from "../valueObject/UUID";
 import Coord from "../valueObject/Coord";
 import RideStatus, { RideStatusFactory } from "../valueObject/RideStatus";
+import DistanceCalculator from "../service/DistanceCalculator";
+import Position from "./Position";
 
 export default class Ride {
     private rideId: UUID;
@@ -68,4 +70,14 @@ export default class Ride {
 	start () {
 		this.status.start();
 	}
+
+    getDistance (positions: Position[]) {
+        let distance = 0;
+        for(const [index, position] of positions.entries()) {
+            const nextPosition = positions[index + 1];
+            if(!nextPosition) continue;
+            distance += DistanceCalculator.calculate(position.coord, nextPosition.coord);
+        }
+        return distance;
+    }
 }

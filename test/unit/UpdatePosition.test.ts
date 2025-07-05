@@ -3,6 +3,7 @@ import GetRide from "../../src/application/usecase/GetRide";
 import RequestRide from "../../src/application/usecase/RequestRide";
 import StartRide from "../../src/application/usecase/StartRide";
 import AcceptRide from "../../src/application/usecase/AcceptRide";
+import UpdatePosition from "../../src/application/usecase/UpdatePosition";
 import Signup from "../../src/application/usecase/signup";
 import { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnection";
 import Registry from "../../src/infra/DI/Registry";
@@ -11,13 +12,14 @@ import { AccountRepositoryDB } from "../../src/infra/repository/accountRepositor
 import { RideRepositoryDB } from "../../src/infra/repository/RideRepository";
 import { PositionRepositoryDB } from "../../src/infra/repository/PositionRepository";
 
-describe("Start Ride", () => {
+describe("Update position", () => {
   let signup: Signup;
   let getAccount: GetAccountId;
   let requestRide: RequestRide;
   let getRide: GetRide;
   let acceptRide: AcceptRide;
   let startRide: StartRide;
+  let updatePosition: UpdatePosition;
   beforeEach(() => {
     Registry.getInstance().provide(
       "accountRepository",
@@ -36,8 +38,9 @@ describe("Start Ride", () => {
     getRide = new GetRide();
     acceptRide = new AcceptRide();
     startRide = new StartRide();
+    updatePosition = new UpdatePosition();
   });
-  test("deve iniciar uma corrida", async () => {
+  test("deve atualizar a posição de uma corrida", async () => {
     const inputSignupPassenger = {
       email: `codee${Math.random()}@gmail.com`,
       password: "w@awx5cB",
@@ -76,8 +79,32 @@ describe("Start Ride", () => {
       rideId:outputRequestRide.rideId,
     }
     await startRide.execute(inputStartRide);
+    const inputUpdatePosition1 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.584905257808835,
+      long: -48.545022195325124,
+    };
+    await updatePosition.execute(inputUpdatePosition1);
+    const inputUpdatePosition2 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.496887588317275,
+      long: -48.522234807851476,
+    }
+    await updatePosition.execute(inputUpdatePosition2);
+    const inputUpdatePosition3 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.584905257808835,
+      long: -48.545022195325124,
+    };
+    await updatePosition.execute(inputUpdatePosition3);
+    const inputUpdatePosition4 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.496887588317275,
+      long: -48.522234807851476,
+    }
+    await updatePosition.execute(inputUpdatePosition4);
     const outputGetRide = await getRide.execute(outputRequestRide.rideId);
-    expect(outputGetRide.status).toBe("in_progress");
+    expect(outputGetRide.distance).toBe(30);
   });
 
 
