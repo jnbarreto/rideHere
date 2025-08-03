@@ -3,8 +3,10 @@ import Coord from "../valueObject/Coord";
 import RideStatus, { RideStatusFactory } from "../valueObject/RideStatus";
 import DistanceCalculator from "../service/DistanceCalculator";
 import Position from "./Position";
+import Mediator from "../../infra/mediator/Mediator";
+import RideCompletedEvent from "../event/RideCompletedEvent";
 
-export default class Ride {
+export default class Ride extends Mediator {
     private rideId: UUID;
     private passengerId: UUID;
     private driverId?: UUID;
@@ -13,7 +15,8 @@ export default class Ride {
     private status: RideStatus;
     private date: Date;
 
-    constructor(rideId: string , passengerId: string, fromLat: number, fromLong: number, toLat: number, toLong: number, status: string, date: Date, driverId: string = '') {
+    constructor(rideId: string , passengerId: string, fromLat: number, fromLong: number, toLat: number, toLong: number, status: string, date: Date, driverId: string = '', private distance: number = 0, private fare: number = 0) {
+        super()
         this.rideId = new UUID(rideId);
         this.passengerId = new UUID(passengerId);
         if(driverId) this.driverId = new UUID(driverId);
@@ -27,7 +30,10 @@ export default class Ride {
         const uuid = UUID.create();
         const status = 'requested';
         const date = new Date();
-        return new Ride(uuid.getValue(), passengerId, fromLat, fromLong, toLat, toLong, status, date);
+        const driverId = '';
+        const distance = 0;
+        const fare = 0;
+        return new Ride(uuid.getValue(), passengerId, fromLat, fromLong, toLat, toLong, status, date, driverId, distance, fare);
     }
 
     getRideId() {
@@ -58,6 +64,14 @@ export default class Ride {
         return this.date;
     }
 
+    getDistance() {
+        return this.distance;
+    }
+
+    getFare() {
+        return this.fare;
+    }
+
     setStatus (status: RideStatus) {
 		this.status = status;
 	}
@@ -71,13 +85,13 @@ export default class Ride {
 		this.status.start();
 	}
 
-    getDistance (positions: Position[]) {
-        let distance = 0;
-        for(const [index, position] of positions.entries()) {
-            const nextPosition = positions[index + 1];
-            if(!nextPosition) continue;
-            distance += DistanceCalculator.calculate(position.coord, nextPosition.coord);
-        }
-        return distance;
+    finish(positions: Position[]){
+        const distance = DistanceCalculator.calculateByPositions(positions);
+        this.distance = distance;
+        this.fare = distance * 2.1;
+        this.status.finish();
+        const event = new RideCompletedEvent(this.getRideId(), this.fare)
+        this.notify(RideCompletedEvent.eventName, event)
     }
+
 }

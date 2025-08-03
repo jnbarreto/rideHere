@@ -1,6 +1,7 @@
 import Ride from "../../domain/entity/Ride";
 import { inject } from "../DI/Registry";
 import DatabaseConnection from "../database/DatabaseConnection";
+import Logger from "../logger/Logger";
 
 export default interface RideRepository {
   saveRide(ride: Ride): Promise<void>;
@@ -13,8 +14,9 @@ export class RideRepositoryDB implements RideRepository {
   connection?: DatabaseConnection;
 
   async saveRide(ride: Ride): Promise<void> {
+    Logger.getInstance().debug('save ride', ride);
     await this.connection?.query(
-      "insert into ccca.ride (ride_id, passenger_id, from_lat, from_long, to_lat, to_long, status, date) values ($1, $2, $3, $4, $5, $6, $7, $8)",
+      "insert into ccca.ride (ride_id, passenger_id, from_lat, from_long, to_lat, to_long, status, date, distance, fare) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
       [
         ride.getRideId(),
         ride.getPassengerId(),
@@ -24,6 +26,8 @@ export class RideRepositoryDB implements RideRepository {
         ride.getTo().getLong(),
         ride.getStatus(),
         ride.getDate(),
+        ride.getDistance(),
+        ride.getFare(),
       ]
     );
   }
@@ -34,7 +38,7 @@ export class RideRepositoryDB implements RideRepository {
       [rideId]
     );
     if (!rideData) throw new Error("Ride not found");
-    return new Ride(
+    const ride = new Ride(
       rideData.ride_id,
       rideData.passenger_id,
       parseFloat(rideData.from_lat),
@@ -43,14 +47,19 @@ export class RideRepositoryDB implements RideRepository {
       parseFloat(rideData.to_long),
       rideData.status,
       rideData.date,
-      rideData.driver_id
+      rideData.driver_id,
+      parseFloat(rideData.distance),
+      parseFloat(rideData.fare)
     );
+    Logger.getInstance().debug('get ride', ride);
+    return ride;
   }
 
   async updateRide(ride: Ride): Promise<void> {
+    Logger.getInstance().debug('update ride', ride);
     await this.connection?.query(
-      "update ccca.ride set status = $1, driver_id = $2 where ride_id = $3",
-      [ride.getStatus(), ride.getDriverId(), ride.getRideId()]
+      "update ccca.ride set status = $1, driver_id = $2, distance = $3, fare = $4 where ride_id = $5",
+      [ride.getStatus(), ride.getDriverId(), ride.getDistance(), ride.getFare(), ride.getRideId() ]
     );
   }
 }
