@@ -83,24 +83,28 @@ describe("Update position", () => {
       rideId: outputRequestRide.rideId,
       lat: -27.584905257808835,
       long: -48.545022195325124,
+      date: new Date(),
     };
     await updatePosition.execute(inputUpdatePosition1);
     const inputUpdatePosition2 = {
       rideId: outputRequestRide.rideId,
       lat: -27.496887588317275,
       long: -48.522234807851476,
+      date: new Date(),
     }
     await updatePosition.execute(inputUpdatePosition2);
     const inputUpdatePosition3 = {
       rideId: outputRequestRide.rideId,
       lat: -27.584905257808835,
       long: -48.545022195325124,
+      date: new Date(),
     };
     await updatePosition.execute(inputUpdatePosition3);
     const inputUpdatePosition4 = {
       rideId: outputRequestRide.rideId,
       lat: -27.496887588317275,
       long: -48.522234807851476,
+      date: new Date(),
     }
     await updatePosition.execute(inputUpdatePosition4);
     const outputGetRide = await getRide.execute(outputRequestRide.rideId);

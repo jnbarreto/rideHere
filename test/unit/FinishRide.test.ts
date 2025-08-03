@@ -55,7 +55,7 @@ describe("Finish Ride", () => {
     updatePosition = new UpdatePosition();
     finishRide = new FinishRide();
   });
-  test("deve finalizar a corrida", async () => {
+  test("deve finalizar a corrida em horario comercial", async () => {
     const inputSignupPassenger = {
       email: `codee${Math.random()}@gmail.com`,
       password: "w@awx5cB",
@@ -98,24 +98,28 @@ describe("Finish Ride", () => {
       rideId: outputRequestRide.rideId,
       lat: -27.584905257808835,
       long: -48.545022195325124,
+      date: new Date("2025-03-05T10:00:00")
     };
     await updatePosition.execute(inputUpdatePosition1);
     const inputUpdatePosition2 = {
       rideId: outputRequestRide.rideId,
       lat: -27.496887588317275,
       long: -48.522234807851476,
+      date: new Date("2025-03-05T10:00:00")
     }
     await updatePosition.execute(inputUpdatePosition2);
     const inputUpdatePosition3 = {
       rideId: outputRequestRide.rideId,
       lat: -27.584905257808835,
       long: -48.545022195325124,
+      date: new Date("2025-03-05T10:00:00")
     };
     await updatePosition.execute(inputUpdatePosition3);
     const inputUpdatePosition4 = {
       rideId: outputRequestRide.rideId,
       lat: -27.496887588317275,
       long: -48.522234807851476,
+      date: new Date("2025-03-05T10:00:00")
     }
     await updatePosition.execute(inputUpdatePosition4);
     const inputFinishRide = {
@@ -126,10 +130,161 @@ describe("Finish Ride", () => {
     expect(outputGetRide.distance).toBe(30);
     expect(outputGetRide.fare).toBe(63);
     expect(outputGetRide.status).toBe("completed");
-
-
   });
 
+  test("deve finalizar a corrida em horario noturno", async () => {
+    const inputSignupPassenger = {
+      email: `codee${Math.random()}@gmail.com`,
+      password: "w@awx5cB",
+      name: "codee tech",
+      cpf: "995.525.810-10",
+      carPlate: "",
+      isPassenger: true,
+      isDriver: false,
+    };
+    const inputSignupDriver = {
+      email: `codee${Math.random()}@gmail.com`,
+      password: "w@awx5cB",
+      name: "codee tech",
+      cpf: "995.525.810-10",
+      carPlate: "AAA9999",
+      isPassenger: false,
+      isDriver: true,
+    };
+    const outputSignupPassenger = await signup.execute(inputSignupPassenger);
+    const outputSignupDriver = await signup.execute(inputSignupDriver);
+
+    const inputRequestRide = {
+      passengerId: outputSignupPassenger.accountId,
+      fromLat: -27.584905257808835,
+      fromLong: -48.545022195325124,
+      toLat: -27.496887588317275,
+      toLong: -48.522234807851476,
+    };
+    const outputRequestRide = await requestRide.execute(inputRequestRide);
+    const inputAcceptRide = {
+      rideId: outputRequestRide.rideId,
+      driverId: outputSignupDriver.accountId,
+    }
+    await acceptRide.execute(inputAcceptRide);
+    const inputStartRide = {
+      rideId:outputRequestRide.rideId,
+    }
+    await startRide.execute(inputStartRide);
+    const inputUpdatePosition1 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.584905257808835,
+      long: -48.545022195325124,
+      date: new Date("2025-03-05T23:00:00")
+    };
+    await updatePosition.execute(inputUpdatePosition1);
+    const inputUpdatePosition2 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.496887588317275,
+      long: -48.522234807851476,
+      date: new Date("2025-03-05T23:00:00")
+    }
+    await updatePosition.execute(inputUpdatePosition2);
+    const inputUpdatePosition3 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.584905257808835,
+      long: -48.545022195325124,
+      date: new Date("2025-03-05T23:00:00")
+    };
+    await updatePosition.execute(inputUpdatePosition3);
+    const inputUpdatePosition4 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.496887588317275,
+      long: -48.522234807851476,
+      date: new Date("2025-03-05T23:00:00")
+    }
+    await updatePosition.execute(inputUpdatePosition4);
+    const inputFinishRide = {
+      rideId: outputRequestRide.rideId
+    }
+    await finishRide.execute(inputFinishRide);
+    const outputGetRide = await getRide.execute(outputRequestRide.rideId);
+    expect(outputGetRide.distance).toBe(30);
+    expect(outputGetRide.fare).toBe(117);
+    expect(outputGetRide.status).toBe("completed");
+  });
+
+  test("deve finalizar a corrida em horario promocional", async () => {
+    const inputSignupPassenger = {
+      email: `codee${Math.random()}@gmail.com`,
+      password: "w@awx5cB",
+      name: "codee tech",
+      cpf: "995.525.810-10",
+      carPlate: "",
+      isPassenger: true,
+      isDriver: false,
+    };
+    const inputSignupDriver = {
+      email: `codee${Math.random()}@gmail.com`,
+      password: "w@awx5cB",
+      name: "codee tech",
+      cpf: "995.525.810-10",
+      carPlate: "AAA9999",
+      isPassenger: false,
+      isDriver: true,
+    };
+    const outputSignupPassenger = await signup.execute(inputSignupPassenger);
+    const outputSignupDriver = await signup.execute(inputSignupDriver);
+
+    const inputRequestRide = {
+      passengerId: outputSignupPassenger.accountId,
+      fromLat: -27.584905257808835,
+      fromLong: -48.545022195325124,
+      toLat: -27.496887588317275,
+      toLong: -48.522234807851476,
+    };
+    const outputRequestRide = await requestRide.execute(inputRequestRide);
+    const inputAcceptRide = {
+      rideId: outputRequestRide.rideId,
+      driverId: outputSignupDriver.accountId,
+    }
+    await acceptRide.execute(inputAcceptRide);
+    const inputStartRide = {
+      rideId:outputRequestRide.rideId,
+    }
+    await startRide.execute(inputStartRide);
+    const inputUpdatePosition1 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.584905257808835,
+      long: -48.545022195325124,
+      date: new Date("2025-03-01T23:00:00")
+    };
+    await updatePosition.execute(inputUpdatePosition1);
+    const inputUpdatePosition2 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.496887588317275,
+      long: -48.522234807851476,
+      date: new Date("2025-03-01T23:00:00")
+    }
+    await updatePosition.execute(inputUpdatePosition2);
+    const inputUpdatePosition3 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.584905257808835,
+      long: -48.545022195325124,
+      date: new Date("2025-03-01T23:00:00")
+    };
+    await updatePosition.execute(inputUpdatePosition3);
+    const inputUpdatePosition4 = {
+      rideId: outputRequestRide.rideId,
+      lat: -27.496887588317275,
+      long: -48.522234807851476,
+      date: new Date("2025-03-01T23:00:00")
+    }
+    await updatePosition.execute(inputUpdatePosition4);
+    const inputFinishRide = {
+      rideId: outputRequestRide.rideId
+    }
+    await finishRide.execute(inputFinishRide);
+    const outputGetRide = await getRide.execute(outputRequestRide.rideId);
+    expect(outputGetRide.distance).toBe(30);
+    expect(outputGetRide.fare).toBe(30);
+    expect(outputGetRide.status).toBe("completed");
+  });
 
   afterEach(async () => {
     const connection = Registry.getInstance().inject("databaseConnection");
