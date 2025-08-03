@@ -2,7 +2,7 @@ import CarPlate from "../valueObject/carPlate";
 import CPF from "../valueObject/CPF";
 import Email from "../valueObject/Email";
 import Name from "../valueObject/Name";
-import Password from "../valueObject/Password";
+import Password, { PasswordFactory } from "../valueObject/Password";
 import UUID from "../valueObject/UUID";
 
 export default class Account {
@@ -21,13 +21,14 @@ export default class Account {
     password: string,
     readonly isPassenger: boolean,
     readonly isDriver: boolean,
-    carPlate: string
+    carPlate: string,
+    passwordType: string = 'textplain'
   ) {
     this.accountId = new UUID(accountId);
     this.name = new Name(name);
     this.email = new Email(email);
     this.cpf = new CPF(cpf);
-    this.password = new Password(password);
+    this.password = PasswordFactory.restore(passwordType, password);
     if (isDriver) this.carPlate = new CarPlate(carPlate);
   }
 
@@ -38,18 +39,21 @@ export default class Account {
     password: string,
     isPassenger: boolean,
     isDriver: boolean,
-    carPlate?: string
+    carPlate?: string,
+    passwordType: string = 'textplain'
   ) {
     const accountId = UUID.create();
+    const passwordValue = PasswordFactory.create(passwordType, password);
     return new Account(
       accountId.getValue(),
       name,
       email,
       cpf,
-      password,
+      passwordValue.getValue(),
       isPassenger,
       isDriver,
-      carPlate as string
+      carPlate as string,
+      passwordType
     );
   }
 
@@ -77,7 +81,7 @@ export default class Account {
     return this.password.getValue();
   }
 
-  changePassword(newPassword: string) {
-    this.password = new Password(newPassword);
+  getPasswordType() {
+    return this.password.type;
   }
 }

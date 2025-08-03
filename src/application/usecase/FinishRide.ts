@@ -1,6 +1,7 @@
 import Position from "../../domain/entity/Position";
 import RideCompletedEvent from "../../domain/event/RideCompletedEvent";
 import { inject } from "../../infra/DI/Registry";
+import Logger from "../../infra/logger/Logger";
 import Mediator from "../../infra/mediator/Mediator";
 import PositionRepository from "../../infra/repository/PositionRepository";
 import RideRepository from "../../infra/repository/RideRepository";
