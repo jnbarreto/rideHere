@@ -20,6 +20,8 @@ npm run dev
 ```
 npm run test
 ```
+### SonarQube
+``` npm run sonar  ```
 ### How to open the test coverage report in the browser (Default Ubuntu)
 ```
 xdg-open coverage/lcov-report/index.html
