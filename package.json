@@ -13,7 +13,8 @@
     "dev": " nodemon src/main.ts",
     "startClimem": "npx tsc && CLIMEM=8999 node -r climem ./dist/src/main",
     "climem": "npx climem 8999",
-    "cannon": "npx autocannon -c 100 -d 30 -p 10 http://localhost:3002/account/0357c37d-b14d-4211-bcf4-633b0fd40d3d"
+    "cannon": "npx autocannon -c 100 -d 30 -p 10 http://localhost:3002/account/0357c37d-b14d-4211-bcf4-633b0fd40d3d",
+    "sonar": "sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN"
   },
   "dependencies": {
     "@types/express": "^4.17.17",
@@ -31,6 +32,7 @@
     "@types/cors": "^2.8.18",
     "autocannon": "^8.0.0",
     "climem": "^2.0.0",
+    "sonar-scanner": "^3.1.0",
     "nodemon": "^3.1.9"
   }
 }
